@@ -6,6 +6,7 @@ import javax.tools.Tool;
 import java.util.Date;
 
 public class Message {
+	
     private String name;
     private String title;
     private String content;
