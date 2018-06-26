@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="js/jquery-3.3.1.js"></script>
+<script>
+    $(function(){
+      $.ajax({
+          url:"/findall",
+          success:function (data) {
+              console.log(data);
+              for (var i=0;i<data.length;i++){
+                  var tr='<tr>';
+                  tr+='<td>'+data[i].name+'</td>';
+                  tr+='<td>'+data[i].title+'</td>';
+                  tr+='<td>'+data[i].content+'</td>';
+                  tr+='</tr>';
+                  $("#tab").append(tr);
+              }
+          }
+      })
+    })
+    $(function () {
+        $("#submit").click(function () {
+            var name=$("#name").val();
+            var title=$("#title").val();
+            var content=$("#content").val();
+            $.ajax({
+                url:"/addajax",
+                type:"post",
+                data:{name:name,title:title,content:content},
+                dataType:"json",
+                success:function (data) {
+                    console.log(data);
+                    alert(data.result)
+                }
+            })
+        })
+    })
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form>
+        <input type="text" id="name">
+        <input type="text" id="title">
+        <input type="text" id="content">
+        <button id="submit" type="button" value="submit">Submit</button>
+    </form>
+    <table id="tab">
+        <tr>
+            <th>name</th>
+            <th>title</th>
+            <th>content</th>
+        </tr>
+    </table>
+</body>
+</html>

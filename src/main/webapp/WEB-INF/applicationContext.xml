@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+    <bean id="ds" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl"/>
+        <property name="username" value="scott"/>
+        <property name="password" value="19970226"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 加载mybatis的主配置文件 -->
+        <property name="configLocation" value="classpath:com/zxd1997/Mapper/MyBatis.xml"/>
+        <!-- 注入数据源 -->
+        <property name="dataSource" ref="ds"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 指定扫描的包名
+        如果扫描多个包，每个包中间使用半角逗号分隔
+        -->
+        <property name="basePackage" value="com.zxd1997.Mapper"/>
+        <!-- 自动创建session（connection）去数据库交互 -->
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
+    </bean>
+    <bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds"/>
+    </bean>
+    <!-- 开启注解事务 -->
+    <tx:annotation-driven transaction-manager="tx"/>
+</beans>

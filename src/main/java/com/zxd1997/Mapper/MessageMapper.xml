@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zxd1997.Mapper.MessageMapper">
+    <select id="getPages" resultType="int">
+        select count(*) from message
+    </select>
+    <select id="find_range" parameterType="Map" resultType="com.zxd1997.Beans.Message">
+        select * from (select rownum as rowno,tt.*from (select * from message order by id desc)tt)t where t.rowno&gt;=#{a} and t.rowno&lt;=#{b}
+    </select>
+    <select id="findall" resultType="com.zxd1997.Beans.Message">
+        select * from message
+    </select>
+    <select id="find_range_with_con" parameterType="Map" resultType="com.zxd1997.Beans.Message">
+        select * from (select rownum as rowno,tt.*from (select * from message order by id desc)tt)t where t.rowno&gt;=#{a}
+        and t.rowno&lt;=#{b}
+        <if test="name!=null">
+            and name like '%${name}%'
+        </if>
+        <if test="title!=null">
+            and title like '%${title}%'
+        </if>
+        <if test="content!=null">
+            and content like '%${content}%'
+        </if>
+    </select>
+    <select id="pages_with_con" parameterType="Map" resultType="int">
+        select count(*) from message
+        <where>
+        <if test="name!=null">
+            and name like '%${name}%'
+        </if>
+        <if test="title!=null">
+            and title like '%${title}%'
+        </if>
+        <if test="content!=null">
+            and content like '%${content}%'
+        </if></where>
+    </select>
+    <delete id="delete" parameterType="int">
+        delete from message where id=#{id}
+    </delete>
+    <select id="findAll" resultType="com.zxd1997.Beans.Message">
+    SELECT * FROM message
+    </select>
+    <insert id="add" parameterType="com.zxd1997.Beans.Message">
+        insert into message values (seq_message.nextval,#{name },#{title},#{content},sysdate)
+    </insert>
+</mapper>
