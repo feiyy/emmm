@@ -5,6 +5,10 @@ public class User {
     private String password;
     private int balance;
 
+
+
+
+
     public User(String username, String password, int balance) {
 
         this.username = username;
